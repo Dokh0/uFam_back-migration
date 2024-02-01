@@ -1,3 +1,37 @@
+const mongoose = require('mongoose');
+
+const notificationSchema = new mongoose.Schema({
+  content: String,
+  contentId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Content",
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  dob: Date,
+  password: {
+    type: String,
+    required: true,
+  },
+  role: {
+    type: String,
+    default: 'user',
+  },
+  profile_picture: String,
+  familyId: { 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Family' 
+  },
+})
+
+const Notification = mongoose.model('Notification', notificationSchema);
+
+module.exports = Notification;
+
+
 /* 
 
 const Notification = sequelize.define(
