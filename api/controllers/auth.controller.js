@@ -5,7 +5,7 @@ const Family = require('../models/family.model')
 const { generatePassword } = require('./verified_email.controller')
 
 async function signup(req, res) {
-    const saltRounds = bcrypt.genSaltSync(parseInt(process.env.SALTROUNDS))
+    const saltRounds = bcrypt.genSaltSync(parseInt(process.env.SALTROUND))
     const hashedPassword = bcrypt.hashSync(req.body.password, saltRounds)
     req.body.password = hashedPassword
     try {

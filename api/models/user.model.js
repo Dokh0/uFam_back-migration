@@ -1,5 +1,40 @@
-const { DataTypes } = require("sequelize");
+const mongoose = require('mongoose');
+
+const userSchema = new mongoose.Schema({
+  name: String,
+  surname: String,
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  dob: Date,
+  password: {
+    type: String,
+    required: true,
+  },
+  role: {
+    type: String,
+    default: 'user',
+  },
+  profile_picture: String,
+  familyId: { 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Family' 
+  },
+})
+
+const User = mongoose.model('User', userSchema);
+
+module.exports = User
+
+
+
+
+
+/* const { DataTypes } = require("sequelize");
 const { sequelize } = require("../../database/index");
+
 
 const User = sequelize.define(
   "user",
@@ -41,4 +76,4 @@ const User = sequelize.define(
   }
 );
 
-module.exports = User;
+module.exports = User; */

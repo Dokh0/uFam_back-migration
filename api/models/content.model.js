@@ -1,5 +1,17 @@
-const { DataTypes } = require("sequelize");
-const { sequelize } = require("../../database/index");
+const mongoose = require('mongoose');
+
+const contentSchema = new mongoose.Schema({
+  content_url: String,
+},
+{
+  timestamps: false,
+})
+
+const Content = mongoose.model('Contents', contentSchema);
+
+module.exports = Content
+
+/* 
 
 const Contents = sequelize.define(
   "content",
@@ -14,4 +26,4 @@ const Contents = sequelize.define(
   }
 );
 
-module.exports = Contents;
+module.exports = Contents; */

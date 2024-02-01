@@ -1,5 +1,30 @@
-const { sequelize } = require("../../database/index");
-const { DataTypes } = require("sequelize")
+const mongoose = require('mongoose');
+
+const likeSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
+  contentId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Content',
+  },
+  commentId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Comment',
+  },
+  messageId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Message',
+  }
+})
+
+const Like = mongoose.model('Like', likeSchema);
+
+module.exports = Like
+
+
+/* 
 
 const Like = sequelize.define("like", {
     userId: {
@@ -23,3 +48,4 @@ const Like = sequelize.define("like", {
 });
 
 module.exports = Like
+ */

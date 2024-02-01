@@ -4,11 +4,7 @@ const Content = require("../models/content.model")
 
 async function getCommentsContent(req, res) {
     try {
-        const commentContent = await Comment_Contents.findAll(/* {
-            where: {
-                photoId: req.params.id
-            }
-        } */)
+        const commentContent = await Comment_Contents.find(req.params.id)
         if (!commentContent) { res.status(404).send('Comment on content not found') }
         return res.status(200).json(commentContent)
     } catch (error) {
@@ -18,11 +14,10 @@ async function getCommentsContent(req, res) {
 
 async function createCommentContent(req, res) {
     try {
-        // console.log("hola")
         const comment = await Comment_Contents.create(req.body)
-        const user = await User.findByPk(res.locals.user.id)
+        const user = await User.findById(res.locals.user.id)
         if (!user) { res.status(404).send('User not found') }
-        const content = await Content.findByPk(req.params.contentId)
+        const content = await Content.findById(req.params.contentId)
         await comment.setContent(content)
         await comment.setUser(user)
         return res.status(200).json(comment)
@@ -33,11 +28,7 @@ async function createCommentContent(req, res) {
 
 async function deleteCommentContent(req, res) {
     try {
-        const commentContent = await Comment_Contents.destroy({
-            where: {
-                id: req.params.id
-            }
-        })
+        const commentContent = await Comment_Contents.findByIdAndDelete(req.params.id)
         res.status(500).json({ text: 'Comment on content removed', commentContent: commentContent })
     } catch (error) {
         return res.status(500).send(error.message)

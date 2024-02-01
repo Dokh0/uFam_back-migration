@@ -1,6 +1,4 @@
-const { sequelize } = require("../../database/index");
-const { DataTypes } = require("sequelize");
-
+/* 
 const VerifiedEmail = sequelize.define(
   "verified_email",{
     email: {
@@ -22,3 +20,4 @@ const VerifiedEmail = sequelize.define(
 );
 
 module.exports = VerifiedEmail;
+ */

@@ -1,5 +1,4 @@
-const { DataTypes } = require("sequelize");
-const { sequelize } = require("../../database/index");
+/* 
 
 const Notification = sequelize.define(
   "notification",
@@ -31,3 +30,4 @@ const Notification = sequelize.define(
 );
 
 module.exports = Notification;
+ */

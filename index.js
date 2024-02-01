@@ -2,14 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 require("dotenv").config();
-const { checkConnection, syncModels } = require("./database/index");
-const { setRelations } = require("./database/models");
+const dbConnect = require("./database/index");
 
-async function connectDB() {
-  await checkConnection();
-  setRelations();
-  await syncModels();
-}
 
 function launchServer() {
     const app = express()
@@ -23,7 +17,7 @@ function launchServer() {
 }
 
 async function startAPI() {
-  await connectDB();
+  await dbConnect();
   launchServer();
 }
 

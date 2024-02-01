@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt')
 
 async function getAllUsers(req, res) {
   try {
-    const users = await User.findAll();
+    const users = await User.find();
     return res.status(200).json(users);
   } catch (error) {
     return res.status(500).send(error.message);
@@ -15,7 +15,7 @@ async function getAllUsers(req, res) {
 
 async function getOneUser(req, res) {
   try {
-    const user = await User.findByPk(req.params.id);
+    const user = await User.findById(req.params.id);
     if (!user) {
       res.status(500).send("User not found");
     }
@@ -27,7 +27,7 @@ async function getOneUser(req, res) {
 
 async function getProfile(req, res) {
   try {
-    const user = await User.findByPk(res.locals.user.id);
+    const user = await User.findById(res.locals.user.id);
     if (!user) {
       res.status(500).send("User not found");
     }
@@ -39,8 +39,8 @@ async function getProfile(req, res) {
 
 async function getFamProfile(req, res) {
   try {
-    const famProfile = await User.findByPk(req.params.id);
-    const user = await User.findByPk(res.locals.user.id, {
+    const famProfile = await User.findById(req.params.id);
+    const user = await User.findById(res.locals.user.id, {
       include: Family,
     });
     const familyMember = await User.findOne({
@@ -76,19 +76,15 @@ const hashedPassword = bcrypt.hashSync(password, saltRounds)
 req.body.password = hashedPassword
 
   const newDate = dayjs(req.body.dob, "MM-DD-YYYY").format("YYYY-MM-DD");
-  req.body.dob = newDate
   try {
-    const user = await User.update(
+    const user = await User.findByIdAndUpdate(res.locals.user.id, 
       {
         ...req.body,
         dob: newDate,
-      },
-      {
-        where: {
-          id: res.locals.user.id,
-        },
-      });
-    if (user == 0) {
+        password: hashedPassword
+      }, { new: true });
+
+    if (!user) {
       return res.status(404).send("User not found");
     }
     return res.status(200).send("User has been updated");
@@ -99,11 +95,7 @@ req.body.password = hashedPassword
 
 async function deleteUser(req, res) {
   try {
-    const user = await User.destroy({
-      where: {
-        id: req.params.id,
-      },
-    })
+    const user = await User.findByIdAndDelete(req.params.id)
     if (!user) {
       return res.status(404).send("User not found");
     }

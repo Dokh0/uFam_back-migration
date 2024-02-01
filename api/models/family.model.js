@@ -1,5 +1,18 @@
-const { DataTypes } = require("sequelize");
-const { sequelize } = require("../../database/index");
+const mongoose = require('mongoose');
+
+const familySchema = new mongoose.Schema({
+  family_name: String
+},
+{
+  timestamps: false,
+})
+
+const Family = mongoose.model('Family', familySchema);
+
+module.exports = Family
+
+
+/* 
 
 const Family = sequelize.define(
   "family",
@@ -15,3 +28,4 @@ const Family = sequelize.define(
 );
 
 module.exports = Family;
+ */

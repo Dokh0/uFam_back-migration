@@ -1,5 +1,17 @@
-const { DataTypes } = require("sequelize");
-const { sequelize } = require("../../database/index");
+const mongoose = require('mongoose');
+
+const commentSchema = new mongoose.Schema({
+  comment: String,
+},
+  {
+    timestamps: false
+  })
+
+const Comment = mongoose.model('Comment', commentSchema);
+
+module.exports = Comment
+
+/* 
 
 const Comment_Contents = sequelize.define(
   "comment_contents",
@@ -14,4 +26,4 @@ const Comment_Contents = sequelize.define(
   }
 );
 
-module.exports = Comment_Contents;
+module.exports = Comment_Contents; */
