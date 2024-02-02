@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const contentSchema = new mongoose.Schema({
   content_url: String,
+  photo_url: String
 },
 {
   timestamps: false,
