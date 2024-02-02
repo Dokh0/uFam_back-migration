@@ -23,23 +23,24 @@ async function signup(req, res) {
 
 async function login(req, res) {
     try {
-        const user = await User.findOne({
-            where: {
-                email: req.body.email
-            }
-        })
-        // console.log(user)
-        if (!user) return res.status(404).send('Error: Email or password incorrect')
-        const comparePass = bcrypt.compareSync(req.body.password, user.password)
-        if (comparePass) {
-            const payload = { email: user.email }
-            const token = jwt.sign(payload, process.env.SECRET, { expiresIn: '1h' })
-            return res.status(200).send({ token: token, id: user.id })
-        } else {
-            return res.status(404).send('Error: Email or Password incorrect')
+        const user = await User.findOne({ email: req.body.email });
+
+        if (!user) {
+            return res.status(401).send('Error: Login credentials are incorrect');
         }
+
+        const comparePass = await bcrypt.compare(req.body.password, user.password);
+        if (!comparePass) {
+            return res.status(401).send('Error: Login credentials are incorrect');
+        }
+
+        const payload = { userId: user._id };
+        const token = jwt.sign(payload, process.env.SECRET, { expiresIn: '1h' });
+        return res.status(200).send({ token: token, id: user._id });
+
     } catch (error) {
-        return res.status(500).send(error.message)
+        console.error('Login error:', error);
+        return res.status(500).send('Error during login process');
     }
 }
 
@@ -64,4 +65,4 @@ async function loginGuest(req, res) {
     }
 }
 
-module.exports = { signup, login, loginGuest }
+module.exports = { signup, login }

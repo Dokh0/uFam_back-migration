@@ -1,9 +1,8 @@
-const { application } = require('express');
 const Notification = require('../models/notification.model')
 
 async function getNotificationById(req, res) {
     try {
-        const notification = await Notification.findByPk(req.params.id)
+        const notification = await Notification.findById(req.params.id)
         if (notification) {
             return res.status(200).json(notification);
         } else {
@@ -16,21 +15,21 @@ async function getNotificationById(req, res) {
 
 async function createNotification(arg) {
     try {
-        const { action, userId, contentId, contentType, like_id } = arg;
+        const { action, userId, contentId, contentType, likeId } = arg;
 
         const notificationData = {
             content: `${action} on ${contentType}`,
-            user_id: userId,
-            content_id: null,
-            comment_id: null,
-            like_id: like_id,
-            blog_id: null,
+            userId: userId,
+            contentId: null,
+            commentId: null,
+            likeId: likeId,
+            blogId: null,
         };
 
         if (contentType === 'content') {
-            notificationData.content_id = contentId;
+            notificationData.contentId = contentId;
         } else if (contentType === 'comment') {
-            notificationData.comment_id = contentId;
+            notificationData.commentId = contentId;
         }
 
         const notification = await Notification.create(notificationData);
@@ -38,7 +37,7 @@ async function createNotification(arg) {
         return notification
     } catch (error) {
         console.error("Error creating notification:", error.message);
-        return res.status(500).send(error.message);
+        throw error
     }
 }
 
@@ -46,9 +45,7 @@ async function createNotification(arg) {
 
 async function deleteNotification(req, res) {
     try {
-        const deleted = await Notification.destroy({
-            where: { notification_id: req.params.id }
-        })
+        const deleted = await Notification.findByIdAndDelete(req.params.id)
         if (deleted) {
             return res.status(200).send({ message: 'Notification deleted' })
         }

@@ -6,25 +6,18 @@ const notificationSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Content",
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  dob: Date,
-  password: {
-    type: String,
-    required: true,
-  },
-  role: {
-    type: String,
-    default: 'user',
-  },
-  profile_picture: String,
-  familyId: { 
+  commentId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Family' 
+    ref: "Comment",
   },
+  likeId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Like",
+  },
+  blogId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Blog",
+  }
 })
 
 const Notification = mongoose.model('Notification', notificationSchema);

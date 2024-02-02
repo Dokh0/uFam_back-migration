@@ -27,6 +27,7 @@ async function getOneUser(req, res) {
 
 async function getProfile(req, res) {
   try {
+    console.log('hola')
     const user = await User.findById(res.locals.user.id);
     if (!user) {
       res.status(500).send("User not found");
@@ -69,7 +70,7 @@ async function getFamProfile(req, res) {
   }
 }  */
 
-async function updateUser(req, res) {
+/* async function updateUser(req, res) {
 const password = req.body.password
 const saltRounds = bcrypt.genSaltSync(parseInt(process.env.SALTROUNDS))
 const hashedPassword = bcrypt.hashSync(password, saltRounds)
@@ -91,7 +92,39 @@ req.body.password = hashedPassword
   } catch (error) {
     return res.status(500).send(error.message);
   }
+} */
+
+async function updateUser(req, res) {
+  // Inicializa un objeto para almacenar los campos que se actualizarán
+  const updateData = {
+    ...req.body
+  };
+
+  // Solo actualiza la contraseña si se ha proporcionado una nueva en la solicitud
+  if (req.body.password) {
+    const saltRounds = bcrypt.genSaltSync(parseInt(process.env.SALTROUNDS));
+    const hashedPassword = bcrypt.hashSync(req.body.password, saltRounds);
+    updateData.password = hashedPassword;
+  }
+
+  // Formatea la fecha de nacimiento si se proporciona
+  if (req.body.dob) {
+    updateData.dob = dayjs(req.body.dob, "MM-DD-YYYY").format("YYYY-MM-DD");
+  }
+
+  try {
+    // Actualiza el usuario en la base de datos
+    const user = await User.findByIdAndUpdate(res.locals.user.id, updateData, { new: true });
+
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+    return res.status(200).send("User has been updated");
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
 }
+
 
 async function deleteUser(req, res) {
   try {

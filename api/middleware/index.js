@@ -2,23 +2,28 @@ const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 
 function checkAuth(req, res, next) {
-  if (!req.headers.authorization)
+  const token = req.headers.authorization;
+  if (!token) {
     return res.status(401).send("Token not found");
+  }
 
-  jwt.verify(
-    req.headers.authorization,
-    process.env.SECRET,
-    async (err, result) => {
-      if (err) return res.status(401).send("Token not valid");
+  jwt.verify(token, process.env.SECRET, async (err, decoded) => {
+    if (err) {
+      return res.status(401).send("Token not valid");
+    }
 
-      const user = await User.findOne({ where: { email: result.email } });
-      if (!user) return res.status(401).send("User not found");
+    try {
+      const user = await User.findById(decoded.userId);
+      if (!user) {
+        return res.status(401).send("User not found");
+      }
 
       res.locals.user = user;
-
       next();
+    } catch (error) {
+      return res.status(500).send("Server error");
     }
-  );
+  });
 }
 
 function checkAdmin(req, res, next) {

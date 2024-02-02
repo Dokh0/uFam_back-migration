@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt')
 
 async function getAllVerifiedEmails(req, res) {
     try {
-        const verified_emails = await VerifiedEmail.findAll()
+        const verified_emails = await VerifiedEmail.find()
         return res.status(200).json(verified_emails)
     } catch (error) {
         return res.status(500).send(error.message)
@@ -16,7 +16,7 @@ async function getAllVerifiedEmails(req, res) {
 
 async function getOneVerifiedEmail(req, res) {
     try {
-        const verified_email = await VerifiedEmail.findByPk(req.params.id)
+        const verified_email = await VerifiedEmail.findById(req.params.id)
         if (!verified_email) { res.status(500).send('Verified Email not found') }
         return res.status(200).json(verified_email)
     } catch (error) {
@@ -35,14 +35,13 @@ async function createVerifiedEmail(req, res) {
 
 async function deleteVerifiedEmail(req, res) {
     try {
-        const verified_email = await VerifiedEmail.destroy({
-            where: {
-                id: req.params.id
-            }
-        })
-        res.status(500).json({ text: 'Verified Email removed', verified_email: verified_email })
+        const verified_email = await VerifiedEmail.findByIdAndDelete(req.params.id);
+        if (!verified_email) {
+            return res.status(404).send({ message: 'Verified Email not found' });
+        }
+        res.status(200).json({ message: 'Verified Email removed', verified_email: verified_email });
     } catch (error) {
-        return res.status(500).send(error.message)
+        return res.status(500).send('Error: ' + error.message);
     }
 }
 
@@ -59,19 +58,15 @@ function generatePassword() {
 const password = generatePassword()
 
 async function sendInvitation(req, res) {
-    // console.log("hola invitacion")
     const email = req.body.email;
-    const user = await User.findByPk(res.locals.user.id)
+    const user = await User.findById(res.locals.user.id)
+    if (!user) {
+        return res.status(404).send('User not found');
+    }
     req.body.familyId = user.familyId
     const family = req.body.familyId
     try {
-        const existingInvitation = await VerifiedEmail.findOne({ 
-            where: 
-            { 
-                email: email, 
-                familyId: family
-            } 
-        });
+        const existingInvitation = await VerifiedEmail.findOne({email: email, familyId: family});
         if (existingInvitation) {
             return res.status(400).send('This email has already been invited.');
         }
@@ -81,10 +76,11 @@ async function sendInvitation(req, res) {
         const saltRounds = bcrypt.genSaltSync(parseInt(process.env.SALTROUNDS))
         const hashedPassword = bcrypt.hashSync(password, saltRounds)
         req.body.password = hashedPassword
-      //  console.log(hashedPassword)
-        const user = await User.create(req.body)
-        const resMail = await mailer.sendMail(sendMailCreateAccount(user.email, password))
-      //  console.log(resMail)
+       
+        const newUser = await User.create(req.body)
+        const mailOptions = sendMailCreateAccount(newUser.email, password);
+        const resMail = await mailer.sendMail(mailOptions);
+
         res.status(200).send({ message: 'Invitation sent successfully.' });
     } catch (error) {
         res.status(500).send('Error: ' + error.message);

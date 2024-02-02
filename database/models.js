@@ -1,4 +1,4 @@
-const User = require("../api/models/user.model");
+/* const User = require("../api/models/user.model");
 const Blog = require("../api/models/blog.model");
 const Family = require("../api/models/family.model");
 const Message = require("../api/models/message.model");
@@ -44,3 +44,4 @@ function setRelations() {
 }
 
 module.exports = { setRelations };
+ */
