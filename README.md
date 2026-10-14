@@ -1,6 +1,6 @@
 # Project Support
 
-### UrFam
+### UFam
 
 ## Summary
 
@@ -28,7 +28,7 @@ Roles: There will be 3 main roles:
 
 <img width="1931" alt="Tables" src="https://github.com/Famblablap/UrFam_back/assets/141185519/55ce0f63-ba25-4ede-8417-86e0d9db31fc">
 
-### UrFam Features
+### UFam Features
 - Interactive Feed: Posts, Like and Comment Features, Friends and Relatives List, User Profiles, Direct Messaging
 - Navigational Left Sidebar: Home, Photo Gallery, Video Library, Resource Links, Message Center, Notification Alerts
 - Functional Right Sidebar: User Directory
