@@ -4,9 +4,6 @@
 
 ## Summary
 
-### Team:
-Theshia, Carolina and Julio.
-
 ### Project Idea:
 -  Our project involves developing a private family social media platform, tailored to create a safe and interactive online environment for families. Similar to popular social networks but focused on family connections, users can create personal profiles, share experiences, and maintain a digital diary of family moments. What sets our platform apart is its emphasis on children's digital education and parental involvement. Families can document and share their journey, from daily activities to special events, fostering a strong sense of community. This platform serves as a hub for families to connect, learn, and grow together in the digital age, ensuring a safe space for children to engage with social media under parental guidance. Our goal is to be the foremost family-oriented social media space, where experiences are shared, and lasting bonds are nurtured.
 
